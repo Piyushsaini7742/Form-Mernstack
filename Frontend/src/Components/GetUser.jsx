@@ -8,7 +8,7 @@ const GetUser = () => {
 
   const handleFetchUser = async () => {
     try {
-      const response = await fetch('https://form-mernstack.onrender.com/get', {
+      const response = await fetch('https://form-mernstack.onrender.com/login', { // Fixed: Changed from "/get" to "/login"
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

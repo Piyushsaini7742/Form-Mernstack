@@ -2,26 +2,38 @@ require('dotenv').config();
 const express = require('express');
 const db = require('./config/db');
 const cors = require('cors');
+const bcrypt = require('bcrypt');  // Import bcrypt
 const User = require('./models/userModel');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Test route
 app.get('/', (req, res) => {
-    res.send('hello google cloud');
-})
+    res.send('Hello Google Cloud');
+});
+
+// User Registration Route
 app.post("/add", async (req, res) => {
     try {
-        const newUser = new User(req.body);
+        const { name, email, password } = req.body;
+
+        // Hash the password before saving it
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new User({ name, email, password: hashedPassword });
         await newUser.save();
+
         res.status(201).json({ message: "User added successfully!", user: newUser });
     } catch (error) {
         console.error("Error adding user:", error);
         res.status(500).json({ message: "Failed to add user", error });
     }
 });
-app.post("/get", async (req, res) => {
+
+// Login Route (Fixed issue: changed from "/get" to "/login")
+app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -30,6 +42,7 @@ app.post("/get", async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
+        // Compare hashed password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid credentials" });
@@ -42,6 +55,7 @@ app.post("/get", async (req, res) => {
     }
 });
 
+// Get All Users Route
 app.get("/users", async (req, res) => {
     try {
         const users = await User.find();
@@ -52,6 +66,5 @@ app.get("/users", async (req, res) => {
     }
 });
 
-const PORT = 5000;
-
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
