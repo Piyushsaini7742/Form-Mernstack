@@ -42,7 +42,6 @@ app.post("/login", async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Compare hashed password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid credentials" });
@@ -54,6 +53,7 @@ app.post("/login", async (req, res) => {
         res.status(500).json({ message: "Server error", error });
     }
 });
+
 
 // Get All Users Route
 app.get("/users", async (req, res) => {
