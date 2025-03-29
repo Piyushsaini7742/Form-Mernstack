@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send('hello google cloud');
+    res.send('Hello');
 })
 app.post("/add", async (req, res) => {
     try {
