@@ -73,7 +73,7 @@ const AddUser = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("https://localhost:5000/add", {
+            const response = await fetch("https://form-mernstack.onrender.com/add", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
